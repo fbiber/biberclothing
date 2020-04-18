@@ -10,6 +10,12 @@
     top: 90px;
     right: 40px;
     z-index: 5;
+
+    .empty-cart {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-around;
+    }
   
     .cart-items {
       height: 300px;
