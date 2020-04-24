@@ -48,4 +48,37 @@ const config = {
     return userRef;
   }
 
+  export const createCollectionAndDocuments = async (collectionKey, documents) => {
+    const collectionRef = firestore.collection(`${collectionKey}`);
+
+    const batchGroup = firestore.batch();
+
+    documents.forEach(doc => {
+      const newDocRef = collectionRef.doc();
+      batchGroup.set(newDocRef, doc);
+    });
+
+    return await batchGroup.commit();
+  }
+
+  export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollections = collections.docs.map(doc => {
+      const {title, items} = doc.data();
+
+      return {
+        routeName: encodeURI(title.toLowerCase()),
+        id: doc.id,
+        title,
+        items
+      };
+    });
+
+    const reducedTransformedCollections = transformedCollections.reduce((accumulator, collection) => {
+      accumulator[collection.title.toLowerCase()] = collection;
+      return accumulator;
+    }, {});
+    console.log(reducedTransformedCollections);
+    return reducedTransformedCollections;
+  }
+
   export default firebase;
